@@ -1,0 +1,79 @@
+/* -------------------- COLOR VARIABLES -------------------- */
+:root {
+  --primary-teal: #009999;
+  --accent-orange: #F7931E;
+  --dark-teal: #006666;
+  --text-dark: #333333;
+  --bg-light: #f9f9f9;
+  --white: #ffffff;
+  --radius-pill: 50px;
+  --radius-card: 8px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  color: var(--text-dark);
+  background-color: var(--bg-light);
+}
+
+.card {
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  background-color: var(--white);
+  padding: 1.5rem;
+}
+
+h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-teal);
+}
+
+label.form-label {
+  font-weight: 600;
+  color: var(--dark-teal);
+}
+
+input.form-control,
+textarea.form-control {
+  border-radius: var(--radius-card);
+  border: 1px solid #ccc;
+  padding: 0.6rem 1rem;
+}
+
+input[type="file"] {
+  padding: 0.3rem 0.6rem;
+  background-color: var(--bg-light);
+  border: 1px solid #ccc;
+  border-radius: var(--radius-card);
+}
+
+.btn-teal {
+  background-color: var(--primary-teal);
+  color: var(--white);
+  border: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-teal:hover {
+  background-color: var(--dark-teal);
+  box-shadow: var(--shadow);
+}
+
+.form-check-label {
+  color: var(--dark-teal);
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  h4 {
+    font-size: 1.5rem;
+  }
+
+  .btn-teal {
+    font-size: 0.95rem;
+  }
+}

@@ -1,0 +1,46 @@
+/* ---------------- ADDRESS PAGE STYLES ---------------- */
+body {
+    background-color: #f8fdfd;
+  }
+  
+  h2, h5 {
+    color: #009999;
+    font-weight: 700;
+  }
+  
+  .btn-teal {
+    background-color: #009999;
+    color: #ffffff;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-teal:hover {
+    background-color: #006666;
+  }
+  
+  .card {
+    border-radius: 12px;
+    border: none;
+  }
+  
+  input.form-control, .form-check-input {
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  
+  .form-check-input:checked {
+    background-color: #009999;
+    border-color: #009999;
+  }
+  
+  .badge.bg-success {
+    font-size: 0.8rem;
+    padding: 0.4em 0.6em;
+    border-radius: 8px;
+  }
+  
+  .border-bottom {
+    border-color: #e0f0f0 !important;
+  }
+  

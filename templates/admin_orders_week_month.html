@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Admin | Thyain Suvai{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_orders.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">📅 {{ title }}</h2>
+
+  {% if orders %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Type</th>
+          <th>Table</th>
+          <th>Paid</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>#{{ order.id }}</td>
+          <td>{{ order.customer.name }}</td>
+          <td>{{ order.order_time.strftime('%Y-%m-%d %I:%M %p') }}</td>
+          <td><span class="badge bg-info">{{ order.status }}</span></td>
+          <td>{{ order.order_type }}</td>
+          <td>{% if order.order_type == 'Dine-In' %}{{ order.table_number }}{% else %}-{% endif %}</td>
+          <td>
+            {% if order.payment %}
+              <span class="badge bg-success">Yes</span>
+            {% else %}
+              <form method="POST" action="{{ url_for('mark_order_paid', order_id=order.id) }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger">Mark Paid</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info text-center">No orders found in this time period.</div>
+  {% endif %}
+</div>
+{% endblock %}

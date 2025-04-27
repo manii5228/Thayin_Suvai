@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Menu Item - Thyain Suvai{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit_menu.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-sm p-4">
+        <h4 class="mb-4 text-center">Edit Menu Item</h4>
+        <form method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ menu.name }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ menu.description }}</textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="price" class="form-label">Price (₹)</label>
+            <input type="number" class="form-control" id="price" name="price" step="0.01" value="{{ menu.price }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="quantity_available" class="form-label">Available Quantity</label>
+            <input type="number" class="form-control" id="quantity_available" name="quantity_available" min="0" value="{{ menu.quantity_available }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="image" class="form-label">Update Image</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+          </div>
+
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="is_available" name="is_available" {% if menu.is_available %}checked{% endif %}>
+            <label class="form-check-label" for="is_available">Available</label>
+          </div>
+
+          <button type="submit" class="btn btn-teal rounded-pill w-100">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

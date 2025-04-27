@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Address - Thyain Suvai{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/address.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h2 class="text-center mb-4">Manage Your Addresses</h2>
+
+      <form method="POST" class="card p-4 shadow-sm mb-5">
+        <h5 class="mb-3">Add New Address</h5>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <input type="text" name="line1" class="form-control" placeholder="Address Line 1" required>
+          </div>
+          <div class="col-md-6">
+            <input type="text" name="line2" class="form-control" placeholder="Address Line 2 (optional)">
+          </div>
+          <div class="col-md-4">
+            <input type="text" name="city" class="form-control" placeholder="City" required>
+          </div>
+          <div class="col-md-4">
+            <input type="text" name="state" class="form-control" placeholder="State" required>
+          </div>
+          <div class="col-md-4">
+            <input type="text" name="zip_code" class="form-control" placeholder="Zip Code" required>
+          </div>
+          <div class="col-md-4">
+            <input type="text" name="mobile_number" class="form-control" placeholder="Phone Number" required>
+          </div>
+          <div class="col-md-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="is_default" id="is_default">
+              <label class="form-check-label" for="is_default">Make this my default address</label>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-teal rounded-pill mt-4">Save Address</button>
+      </form>
+
+      <div class="card p-4 shadow-sm">
+        <h5 class="mb-3">Saved Addresses</h5>
+        {% for addr in addresses %}
+          <div class="border-bottom py-2">
+            <p class="mb-1">{{ addr.line1 }}, {{ addr.line2 }}</p>
+            <p class="mb-0">{{ addr.city }}, {{ addr.state }} - {{ addr.zip_code }}</p>
+            {% if addr.is_default %}<span class="badge bg-success">Default</span>{% endif %}
+          </div>
+        {% else %}
+          <p class="text-muted">No addresses saved yet.</p>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

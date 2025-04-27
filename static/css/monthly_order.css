@@ -1,0 +1,30 @@
+/* ---------------- MONTHLY ORDERS PAGE ---------------- */
+body {
+    background-color: #f4fbfb;
+  }
+  
+  h2 {
+    color: #009999;
+    font-weight: bold;
+  }
+  
+  .table th {
+    background-color: #e0fafa;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .table td {
+    vertical-align: middle;
+    font-size: 0.95rem;
+  }
+  
+  .btn-outline-primary {
+    color: #009999;
+    border-color: #009999;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #009999;
+    color: #ffffff;
+  }

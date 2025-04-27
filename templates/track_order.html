@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Order - Thyain Suvai{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/track_order.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">📦 Track Your Order</h2>
+
+  {% if order %}
+    <div class="card shadow-sm p-4 mb-4">
+      <h5 class="card-title">Order ID: {{ order.id }}</h5>
+      <div class="row g-3 mb-3">
+        {% if order.order_type == 'Dine-In' %}
+          <div class="col-md-6">
+            <div class="border rounded p-3 bg-light shadow-sm h-100">
+              <h3 class="mb-2">🍽️ Dine-In</h3>
+              <p class="mb-1"><strong>Table Number:</strong> {{ order.table_number }}</p>
+            </div>
+          </div>
+        {% else %}
+          <div class="col-md-6">
+            <div class="border rounded p-3 bg-light shadow-sm h-100">
+              <h3 class="mb-2">🚚 Delivery</h3>
+              {% if order.address %}
+              <p class="mb-1"><strong>Address:</strong> {{ order.address.line1 }}, {{ order.address.city }}, {{ order.address.state }} - {{ order.address.zip_code }}</p>
+              <p class="mb-0"><strong>Mobile:</strong> {{ order.address.mobile_number }}</p>
+              {% else %}
+              <p class="text-muted mb-0">No address available.</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      
+      <p><strong>Status:</strong> {{ order.status }}</p>
+      <p><strong>Order Time:</strong> {{ order.order_time.strftime('%Y-%m-%d %I:%M %p') }}</p>
+      <p><strong>Order Type:</strong> {{ order.order_type }}</p>
+      {% if order.order_type == 'Dine-In' %}
+        <p><strong>Table Number:</strong> {{ order.table_number }}</p>
+        {% else %}
+        {% if order.address %}
+          <p><strong>Delivery Address:</strong><br>
+            {{ order.address.line1 }},
+            {{ order.address.city }},
+            {{ order.address.state }} - {{ order.address.zip_code }}<br>
+            <strong>Mobile:</strong> {{ order.address.mobile_number }}
+          </p>
+        {% else %}
+          <p class="text-muted">No delivery address available.</p>
+        {% endif %}
+
+        </p>
+      {% endif %}
+      
+      <p><strong>Total Paid:</strong> ₹{{ order.total if order.total else "Cash On Delivery" }}</p>
+      <a href="{{ url_for('view_invoice', order_id=order.id) }}" class="btn btn-outline-dark mt-3">
+  🧾 View Invoice
+</a>
+
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress mb-4">
+      {% set status_map = {'Placed': 0, 'Accepted': 25, 'Preparing': 50, 'Ready': 75, 'Delivered': 100} %}
+      {% set progress = status_map.get(order.status, 0) %}
+      <div class="progress-bar bg-success" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">{{ order.status }}</div>
+    </div>
+
+    <!-- Items list -->
+    <h4 class="mb-3">🧾 Items Ordered</h4>
+    <ul class="list-group mb-4">
+      {% for item in order.items %}
+        {% if item.menu_item %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ item.menu_item.name }} (x{{ item.quantity }})
+          <span class="text-muted">₹{{ item.menu_item.price * item.quantity }}</span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-danger">
+          [Item no longer available] x{{ item.quantity }}
+        </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    
+ 
+
+    <!-- Delivery Status -->
+    {% if order.order_type == 'Delivery' %}
+    <div class="alert alert-info d-flex align-items-center gap-2">
+      <i class="bi bi-truck"></i> Delivery partner is en route 🚚
+    </div>
+    {% endif %}
+
+    <!-- Review Submission -->
+    {% if order.status == 'Delivered' %}
+    <div class="card p-4 shadow-sm mt-4">
+      <h5>Leave a Review</h5>
+      <form action="{{ url_for('add_review', order_id=order.id) }}" method="POST">
+        <div class="mb-3">
+          <label for="rating" class="form-label">Rating</label>
+          <select class="form-select" id="rating" name="rating" required>
+            <option value="" selected disabled>Choose rating</option>
+            <option value="5">⭐⭐⭐⭐⭐ (5-Star 😍😍😍)</option>
+            <option value="4">⭐⭐⭐⭐(4-Star 😘😘)</option>
+            <option value="3">⭐⭐⭐(3-Star 😁😁)</option>
+            <option value="2">⭐⭐(2-Star 😉)</option>
+            <option value="1">⭐(1-Star 😒)</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label">Comment</label>
+          <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary rounded-pill">Submit Review</button>
+      </form>
+    </div>
+    {% endif %}
+
+    <!-- Navigation buttons -->
+    <div class="text-center mt-4">
+      {% if order.status == 'Placed' %}
+      <form action="{{ url_for('cancel_order', order_id=order.id) }}" method="POST" class="d-inline">
+        <button class="btn btn-danger rounded-pill px-4">Cancel Order</button>
+      </form>
+      {% endif %}
+      <a href="{{ url_for('customer_dashboard') }}" class="btn btn-secondary rounded-pill px-4 ms-2">Back to Dashboard</a>
+    </div>
+
+  {% else %}
+    <div class="alert alert-warning text-center">
+      Order not found.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

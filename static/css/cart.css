@@ -1,0 +1,36 @@
+/* ---------------- CART PAGE STYLES ---------------- */
+body {
+    background-color: #f2fbfb;
+  }
+  
+  h2 {
+    color: #009999;
+    font-weight: bold;
+  }
+  
+  .table th {
+    background-color: #e0fafa;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .table td {
+    vertical-align: middle;
+    font-size: 0.95rem;
+  }
+  
+  .btn-teal {
+    background-color: #009999;
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-teal:hover {
+    background-color: #006666;
+  }
+  
+  .text-muted {
+    font-size: 1rem;
+    color: #777 !important;
+  }

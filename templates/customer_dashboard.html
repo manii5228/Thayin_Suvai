@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard - Thyain Suvai{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/customer_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">Welcome to Thyain Suvai, {{ session.get('user_name', 'Customer') }}!</h2>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4 text-center">
+
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4">
+        <h5 class="mb-3">🍽️ Browse Menu</h5>
+        <p>Explore our delicious South Indian dishes and add them to your cart.</p>
+        <a href="{{ url_for('browse_menu') }}" class="btn btn-teal rounded-pill">Browse Menu</a>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4">
+        <h5 class="mb-3">🚪Address</h5>
+        <p>Address can be manged here</p>
+        <a href="{{ url_for('manage_address') }}" class="btn btn-teal rounded-pill">Address 🏘️🏠</a>
+      </div>
+    </div>
+
+
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4">
+        <h5 class="mb-3">📦 Your Orders</h5>
+        <p>Click below to view and track your past orders.</p>
+    
+        <button class="btn btn-teal rounded-pill mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#ordersCollapse" aria-expanded="false" aria-controls="ordersCollapse">
+          View Past Orders
+        </button>
+    
+        <div class="collapse" id="ordersCollapse">
+          {% if orders %}
+          <ul class="list-group">
+            {% for order in orders %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>Order #{{ order.id }}</strong><br>
+                {{ order.order_time.strftime('%Y-%m-%d %I:%M %p') }} | {{ order.status }}
+              </div>
+              <a href="{{ url_for('track_order', order_id=order.id) }}" class="btn btn-outline-primary btn-sm">Track</a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted mt-2">You haven’t placed any orders yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="col">
+      <div class="card h-100 shadow-sm p-4">
+        <h5 class="mb-3">🚪 Logout</h5>
+        <p>End your session and log out of your account.</p>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger rounded-pill">Logout</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

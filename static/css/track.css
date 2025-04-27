@@ -1,0 +1,50 @@
+/* ---------------- TRACK ORDER PAGE ---------------- */
+body {
+    background-color: #f4fefe;
+  }
+  
+  .track-card {
+    max-width: 600px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border: none;
+  }
+  
+  .status-label {
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    color: white;
+  }
+  
+  .status-label.placed {
+    background-color: #F7931E;
+  }
+  .status-label.preparing {
+    background-color: #17a2b8;
+  }
+  .status-label.ready {
+    background-color: #ffc107;
+    color: #333;
+  }
+  .status-label.delivered {
+    background-color: #28a745;
+  }
+  .status-label.cancelled {
+    background-color: #dc3545;
+  }
+  
+  .list-group-item {
+    font-size: 1rem;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+  

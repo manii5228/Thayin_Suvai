@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Cart - Thyain Suvai{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">🛒 Your Cart</h2>
+
+  {% if cart_items and cart_items|length > 0 %}
+  <form method="POST" action="{{ url_for('place_order') }}">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      {% set grand_total = namespace(value=0) %}  {# Use a namespace to allow mutation #}
+
+      <tbody>
+        {% for item in cart_items %}
+          {% set item_total = item.price * item.quantity %}
+          {% set grand_total.value = grand_total.value + item_total %}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>
+              <input type="number" name="quantity_{{ loop.index0 }}" value="{{ item.quantity }}" min="1" class="form-control" />
+            </td>
+            <td>₹{{ item.price }}</td>
+            <td>₹{{ item_total }}</td>
+            <td>
+              <a href="{{ url_for('remove_from_cart', index=loop.index0) }}" class="btn btn-danger btn-sm">Remove</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      
+      <tfoot>
+        <tr class="table-light fw-bold">
+          <td colspan="3" class="text-end">Grand Total:</td>
+          <td colspan="2">₹{{ grand_total.value }}</td>
+        </tr>
+      </tfoot>
+      
+    </table>
+
+    <div class="text-center mt-4">
+      <!-- Update Cart Button -->
+      <button type="submit" name="action" value="update" class="btn btn-secondary rounded-pill px-4 me-2">
+        Update Cart
+      </button>
+
+    <div class="mb-4">
+      <h5 class="fw-semibold">Choose Order Type</h5>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="order_type" id="dinein" value="Dine-In" checked>
+        <label class="form-check-label" for="dinein">Dine-In 🍽️</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="order_type" id="delivery" value="Delivery">
+        <label class="form-check-label" for="delivery">Delivery 📦</label>
+      </div>
+    </div>
+
+    <div class="mb-3" id="tableNumberSection">
+      <label for="table_number" class="form-label">Table Number (1–10):</label>
+      <input type="number" name="table_number" id="table_number" class="form-control" min="1" max="10">
+    </div>
+
+      <!-- Proceed to Buy Button -->
+  <button type="submit" name="action" value="buy" class="btn btn-teal rounded-pill px-5">
+    Buy Now
+  </button>
+</div>
+    <td>
+      <a href="{{ url_for('clear_cart') }}" class="btn btn-outline-danger rounded-pill px-4 ms-2">Clear Cart</a>
+    </td>
+  </form>
+  {% else %}
+  <div class="alert alert-info text-center">Your cart is empty. <a href="{{ url_for('browse_menu') }}">Browse Menu</a></div>
+  
+  {% endif %}
+</div>
+
+<script>
+  const dineInRadio = document.getElementById('dinein');
+  const deliveryRadio = document.getElementById('delivery');
+  const tableNumberSection = document.getElementById('tableNumberSection');
+
+  function toggleTableField() {
+    tableNumberSection.style.display = dineInRadio.checked ? 'block' : 'none';
+  }
+
+  dineInRadio.addEventListener('change', toggleTableField);
+  deliveryRadio.addEventListener('change', toggleTableField);
+  window.onload = toggleTableField;
+</script>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - Thyain Suvai{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">Admin Dashboard</h2>
+
+  <div class="text-end mb-4">
+    <a href="#addItemForm" class="btn btn-success rounded-pill px-4" data-bs-toggle="collapse">+ Add New Menu Item</a>
+  </div>
+
+  <div id="addItemForm" class="collapse">
+    <form action="{{ url_for('add_menu') }}" method="POST" enctype="multipart/form-data" class="mb-5 p-4 border rounded shadow-sm">
+      <h5>Add New Menu Item</h5>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" name="name" id="name" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+          <label for="base_price" class="form-label">Price</label>
+          <input type="number" name="base_price" id="base_price" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+          <label for="quantity_available" class="form-label">Quantity Available</label>
+          <input type="number" name="quantity_available" id="quantity_available" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label for="description" class="form-label">Description</label>
+          <textarea name="description" id="description" class="form-control" rows="2" required></textarea>
+        </div>
+        <div class="col-md-6">
+          <label for="image" class="form-label">Image</label>
+          <input type="file" name="image" id="image" class="form-control">
+        </div>
+        <div class="col-md-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="is_available" id="is_available" checked>
+            <label class="form-check-label" for="is_available">Available</label>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3 text-end">
+        <button type="submit" class="btn btn-primary rounded-pill px-4">Add Item</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="table-responsive mb-5">
+    <h4 class="mb-3">Menu Items</h4>
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Quantity Left</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in menu %}
+        <tr>
+          <td><img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" width="60"></td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+          <td>₹{{ item.price }}</td>
+          <td>{{ item.quantity_available }}</td>
+          <td>
+            {% if item.is_available %}
+              <span class="badge bg-success">Available</span>
+            {% else %}
+              <span class="badge bg-secondary">Sold Out</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{{ url_for('edit_menu', menu_id=item.id) }}" class="btn btn-sm" >
+              ✏️ Edit
+            </a>
+            
+            <form method="POST" action="{{ url_for('delete_menu', menu_id=item.id) }}" style="display:inline;">
+              <button class="btn btn-sm" style="background-color:
+
+#ECB159
+
+; color: white;" onclick="return confirm('Delete this item?')">
+                🗑 Delete
+              </button>
+            </form>
+            
+            <form method="POST" action="{{ url_for('toggle_availability', menu_id=item.id) }}" style="display:inline;">
+              <button type="submit" class="btn btn-sm mt-1"
+                style="background-color: {% if item.is_available %}#f39c12{% else %}#27ae60{% endif %}; color: white;">
+                {% if item.is_available %}Mark Sold Out{% else %}Mark Available{% endif %}
+              </button>
+            </form>
+            
+           
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mb-5">
+    <h4 class="mb-3">Orders</h4>
+    <a href="{{ url_for('admin_orders') }}" class="btn btn-outline-primary me-2">All Orders</a>
+    <a href="{{ url_for('admin_orders_today') }}" class="btn btn-outline-info me-2">Today</a>
+    <a href="{{ url_for('admin_orders_month') }}" class="btn btn-outline-info">This Month</a>
+  </div>
+
+  {% if orders %}
+  <table class="table table-bordered text-center align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Type</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>Payment</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.customer.name }}</td>
+        <td>{{ order.order_type }}</td>
+        <td>{{ order.order_time.strftime('%d %b %Y, %I:%M %p') }}</td>
+        <td>
+          <span class="badge bg-{{ 'success' if order.status == 'Delivered' else 'warning' }}">{{ order.status }}</span>
+        </td>
+        <td>
+          {% if order.payment %}
+            <span class="text-success">Paid</span>
+          {% else %}
+            <span class="text-danger">Not Paid</span>
+          {% endif %}
+        </td>
+        <td><a href="{{ url_for('track_order', order_id=order.id) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="alert alert-info text-center">No orders found for this period.</div>
+  {% endif %}
+  
+  <div class="mb-5">
+    <h4 class="mb-3">Customer Reviews</h4>
+    <a href="{{ url_for('admin_reviews') }}" class="btn btn-outline-dark">Manage Reviews</a>
+  </div>
+</div>
+{% endblock %}

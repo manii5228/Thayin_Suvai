@@ -1,0 +1,46 @@
+/* ---------------- PAST ORDERS PAGE ---------------- */
+body {
+    background-color: #f4fbfb;
+  }
+  
+  h2 {
+    color: #009999;
+    font-weight: bold;
+  }
+  
+  .card {
+    border-radius: 12px;
+    border: none;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-title {
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .btn-teal {
+    background-color: #009999;
+    color: #ffffff;
+    border: none;
+  }
+  
+  .btn-teal:hover {
+    background-color: 
+   
+    #B67352;}
+  
+  .btn-outline-primary {
+    border-color: #009999;
+    color: #009999;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #009999;
+    color: #fff;
+  }
+  

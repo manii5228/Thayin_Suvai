@@ -1,0 +1,68 @@
+/* customer_dashboard.css */
+
+body {
+  background-color: #f8f9fa;
+  font-family: 'Lato', sans-serif;
+}
+
+h2 {
+  font-weight: bold;
+  color: #009999;
+}
+
+.card {
+  border: none;
+  border-radius: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card h5 {
+  font-weight: bold;
+  color: #333;
+}
+
+.card p {
+  color: #555;
+}
+
+.btn-teal {
+  background-color: #009999;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-teal:hover {
+  background-color: #007777;
+  color: white;
+}
+
+.btn-outline-teal {
+  border: 2px solid #009999;
+  color: #009999;
+  background-color: transparent;
+}
+
+.btn-outline-teal:hover {
+  background-color: #F7931E;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .card h5 {
+    font-size: 1rem;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+  }
+}

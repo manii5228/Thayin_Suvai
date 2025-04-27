@@ -1,0 +1,43 @@
+/* ---------------- LOGIN PAGE STYLES ---------------- */
+body {
+    background-color: #f4f9f9;
+  }
+  
+  .login-container {
+    background: linear-gradient(to right, #009999, #00cccc);
+    padding: 2rem 1rem;
+  }
+  
+  .login-card {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: none;
+  }
+  
+  .login-card h2 {
+    color: #009999;
+    font-weight: 700;
+  }
+  
+  .btn-teal {
+    background-color: #009999;
+    color: #ffffff;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-teal:hover {
+    background-color: #F7931E;
+    color: #fff;
+  }
+  
+  a {
+    color: #F7931E;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  

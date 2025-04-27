@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment - Thyain Suvai{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">💳 Confirm Payment Method</h2>
+  <form method="POST" class="mx-auto" style="max-width: 500px;">
+    <input type="hidden" name="method" value="Cash on Delivery">
+
+    <div class="alert alert-info text-center">
+      You will pay upon receiving your order (Cash on Delivery).
+    </div>
+
+    <h5 class="text-end mb-4">Total: ₹{{ total_amount }}</h5>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-teal rounded-pill px-5">Place Order</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

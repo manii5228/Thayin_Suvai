@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice #{{ order.id }} - Thyain Suvai</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 40px;
+      color: #333;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: #009999;
+      margin-bottom: 5px;
+    }
+
+    .info {
+      margin-bottom: 30px;
+    }
+
+    .info p {
+      margin: 4px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #e0fafa;
+    }
+
+    .total-row {
+      font-weight: bold;
+      background-color: #f8f8f8;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .btn-print {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #009999;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 30px;
+    }
+
+    @media print {
+      .btn-print {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Thyain Suvai</h1>
+    <p>Order Invoice</p>
+  </div>
+
+  <div class="text-center">
+    <a href="#" onclick="window.print()" class="btn-print">🖨️ Download / Print Invoice</a>
+  </div>
+
+  <div class="info">
+    <p><strong>Invoice #:</strong> {{ order.id }}</p>
+    <p><strong>Date:</strong> {{ order.order_time.strftime('%d %B %Y, %I:%M %p') }}</p>
+    <p><strong>Status:</strong> {{ order.status }}</p>
+    <p><strong>Order Type:</strong> {{ order.order_type }}</p>
+    {% if order.order_type == 'Dine-In' %}
+      <p><strong>Table Number:</strong> {{ order.table_number }}</p>
+    {% endif %}
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>₹{{ '%.2f' % item.price }}</td>
+        <td>₹{{ '%.2f' % item.total }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="total-row">
+        <td colspan="3">Grand Total</td>
+        <td>₹{{ '%.2f' % total_amount }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <p>Thank you for ordering with Thyain Suvai! Visit again 😊</p>
+  </div>
+
+</body>
+</html>

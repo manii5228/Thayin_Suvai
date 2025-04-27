@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to Thayin Suvai - Fresh South Indian Delights{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white text-center d-flex align-items-center justify-content-center" style="background: url('{{ url_for('static', filename='uploads/05.jpg') }}') no-repeat center center; background-size: cover; height: 100vh;">
+  <div class="comic-box">
+    <h1 class="comic-title">Fresh South Indian Flavors</h1>
+    <p class="comic-subtitle">From our kitchen to your table — fast, fresh, and unforgettable.</p>
+    
+    {% if session.get('user_type') != 'customer' %}
+      <a href="{{ url_for('login') }}" class="btn btn-lg btn-teal rounded-pill px-5 py-3 mt-3">Order Now</a>
+    {% else %}
+      <a href="{{ url_for('browse_menu') }}" class="btn btn-lg btn-teal rounded-pill px-5 py-3 mt-3">Order Now</a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- What Makes Us Special -->
+<section class="features-section bg-white py-5">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <img src="{{ url_for('static', filename='uploads/02.jpg') }}" class="mb-3" width="60" alt="Fresh">
+        <h5>Fresh Ingredients</h5>
+        <p>Hand-picked ingredients that ensure every bite bursts with flavor.</p>
+      </div>
+      <div class="col-md-4">
+        <img src="{{ url_for('static', filename='uploads/08.jpg') }}" class="mb-3" width="60" alt="Customize">
+        <h5>Customize Your Meal</h5>
+        <p>Choose your spice level, portion, and flavors — it’s your meal, your way.</p>
+      </div>
+      <div class="col-md-4">
+        <img src="{{ url_for('static', filename='uploads/03.jpg') }}" class="mb-3" width="60" alt="Lifestyle">
+        <h5>Designed for Your Lifestyle</h5>
+        <p>Quick bites that don’t compromise on health or taste.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Popular Menu Preview -->
+<section class="menu-preview-section bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Popular Items</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+      {% set popular_items = menu[:6] %}  {# ✅ Only show first 6 items or less #}
+      {% for item in popular_items %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ item.name }}</h5>
+            <p class="card-text small">{{ item.description[:70] }}{% if item.description|length > 70 %}...{% endif %}</p>
+          </div>
+          <div class="card-footer bg-white border-0 text-center">
+            <a href="{{ url_for('browse_menu') }}" class="btn btn-teal rounded-pill px-4">Order Now</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+
+<!-- Rewards Promo -->
+<section class="rewards-section text-center py-5">
+  <div class="container">
+    <h2 class="mb-3">Join Our Rewards Program</h2>
+    <p class="mb-4">Earn points and enjoy exclusive perks every time you dine with us.</p>
+    {% if not session.get('user_id') %}
+    <a href="{{ url_for('register') }}" class="btn btn-teal rounded-pill px-4">Sign Up</a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Location Finder -->
+<section class="location-section text-center py-5 bg-white">
+  <div class="container">
+    <h2 class="mb-3">Find a Location Near You</h2>
+    <p class="mb-4">Beside VelTech University — 138 Ayyappan Nagar,Vellarur.</p>
+    <a href="#" class="btn btn-outline-teal rounded-pill px-4">Always near to your heart</a>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonial-section bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">What Our Customers Say</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col">
+        <div class="testimonial shadow-sm p-4 rounded bg-white">
+          <p class="fst-italic">“Absolutely loved the flavors and the service. Felt like home!”</p>
+          <small class="text-muted d-block mt-3">– Asha R.</small>
+        </div>
+      </div>
+      <div class="col">
+        <div class="testimonial shadow-sm p-4 rounded bg-white">
+          <p class="fst-italic">“Perfect blend of spice, speed, and smiles. Highly recommend!”</p>
+          <small class="text-muted d-block mt-3">– Vinod K.</small>
+        </div>
+      </div>
+      <div class="col">
+        <div class="testimonial shadow-sm p-4 rounded bg-white">
+          <p class="fst-italic">“This is our go-to weekend treat — never disappoints.”</p>
+          <small class="text-muted d-block mt-3">– Sneha M.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
