@@ -47,22 +47,23 @@
       </div>
       {% endfor %}
 
-      <!-- 🚫 Sold Out Items After -->
-      {% for item in sold_out_items %}
-      <div class="col">
-        <div class="card h-100 shadow-sm opacity-75 border border-danger">
-          <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
-          <div class="card-body">
-            <h5 class="card-title">{{ item.name }} <span class="badge bg-danger">Sold Out</span></h5>
-            <p class="card-text">{{ item.description }}</p>
-            <p class="fw-bold">Price: ₹{{ item.price }}</p>
-            <div class="alert alert-danger text-center mt-3 mb-0" role="alert">
-              <strong>Sold Out</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
+
+<!-- 🚫 Sold Out Items Next -->
+{% for item in sold_out_items %}
+<div class="col">
+  <div class="card h-100 shadow-sm sold-out-card">
+    <div class="sold-out-overlay">SOLD OUT</div> <!-- 🛑 nice label -->
+    <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
+    <div class="card-body text-center">
+      <h5 class="card-title text-danger">{{ item.name }}</h5>
+      <p class="card-text">{{ item.description }}</p>
+      <p class="fw-bold">Price: ₹{{ item.price }}</p>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
 
     </div>
   {% else %}

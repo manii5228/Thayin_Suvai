@@ -2,7 +2,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for,flash
 from models import db, MenuItem, Order, OrderItem, Payment, Review, Address, Customer
 from datetime import datetime ,date, timedelta, timezone
-from Thayin_Suvai_ok.forms import LoginForm,MenuItemForm, OrderForm, OrderItemForm, PaymentForm, CouponForm, ReviewForm 
+from forms import LoginForm,MenuItemForm, OrderForm, OrderItemForm, PaymentForm, CouponForm, ReviewForm 
 import calendar
 import os
 from werkzeug.utils import secure_filename

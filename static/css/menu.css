@@ -94,3 +94,32 @@
     cursor: not-allowed;
   }
   
+
+  /* Sold-out card styles */
+.sold-out-card {
+  position: relative;
+  background: #f8d7da; /* Light red/pink background */
+  border: 2px dashed #dc3545; /* Red dashed border */
+  opacity: 0.9;
+}
+
+.sold-out-card img {
+  opacity: 0.7;
+}
+
+.sold-out-card .card-body {
+  background-color: #fff5f5;
+}
+
+.sold-out-overlay {
+  position: absolute;
+  top: 10px;
+  left: -30px;
+  background: #dc3545;
+  color: white;
+  padding: 5px 30px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
