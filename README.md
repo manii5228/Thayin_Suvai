@@ -44,10 +44,8 @@ Responsive mobile-first design
 
 Flash messaging system for actions
 
-📂 Folder Structure
-bash
-Copy
-Edit
+## 📂 Folder Structure
+```
 /static
     /uploads         --> Menu images uploaded dynamically
     /css             --> Styled CSS files for each page
@@ -62,35 +60,24 @@ Edit
 models.py             --> Database models
 app.py                --> Main Flask application
 forms.py              --> WTForms for login/register
-🚀 How to Run
-Install required libraries:
-
-bash
-Copy
-Edit
-pip install flask flask_sqlalchemy
-Set up and initialize the database:
-
-bash
-Copy
-Edit
+```
+## 🚀 How to Run
+### Install required libraries:
+```
+pip install needs.txt
+```
+### Set up and initialise the database:
+```
 flask db init
 flask db migrate
 flask db upgrade
-Run the Flask app:
+```
+### Run the Flask app:
 
-bash
-Copy
-Edit
 flask run
 Visit http://localhost:5000 to use the system!
 
-🎯 Future Improvements
-Integrate real-time admin notifications (for new orders)
 
-Customer loyalty program & reward points
 
-Email/SMS notification on order updates
-
-🌟 Demo Screenshots (Optional)
+## 🌟 Demo Screenshots (Optional)
 (Add screenshots of your customer dashboard, admin panel, track order page here!)
