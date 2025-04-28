@@ -77,7 +77,3 @@ flask db upgrade
 flask run
 Visit http://localhost:5000 to use the system!
 
-
-
-## 🌟 Demo Screenshots (Optional)
-(Add screenshots of your customer dashboard, admin panel, track order page here!)
