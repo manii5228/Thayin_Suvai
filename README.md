@@ -51,10 +51,10 @@ Flash messaging system for actions
     /css             --> Styled CSS files for each page
 
 /templates
-    /admin_orders.html
-    /customer_dashboard.html
-    /track_order.html
-    /login.html
+    admin_orders.html
+    customer_dashboard.html
+    track_order.html
+    login.html
     ... (other pages)
 
 models.py             --> Database models
