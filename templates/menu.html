@@ -16,55 +16,61 @@
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
 
-      <!-- 🍛 Available Items First -->
-      {% for item in available_items %}
-      <div class="col">
-        <div class="card h-100 shadow-sm">
-          <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
-          <div class="card-body">
-            <h5 class="card-title">{{ item.name }}</h5>
-            <p class="card-text">{{ item.description }}</p>
-            <p class="fw-bold">Price: ₹{{ item.price }}</p>
-            <p class="text-muted">Available: {{ item.quantity_available }}</p>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
 
-            <form method="POST" action="{{ url_for('add_to_cart') }}">
-              <input type="hidden" name="item_id" value="{{ item.id }}">
-              <div class="mb-2 d-flex align-items-center">
-                <label for="quantity_{{ item.id }}" class="form-label me-2">Qty:</label>
-                <input type="number" name="quantity" id="quantity_{{ item.id }}"
-                  min="1" max="{{ item.quantity_available }}" value="1"
-                  class="form-control w-25 me-2">
+        <!-- 🍛 Available Items First -->
+        {% for item in menu %}
+          {% if item.is_available and item.quantity_available > 0 %}
+          <div class="col">
+            <div class="card h-100 shadow-sm">
+              <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.name }}</h5>
+                <p class="card-text">{{ item.description }}</p>
+                <p class="fw-bold">Price: ₹{{ item.price }}</p>
+                <p class="text-muted">Available: {{ item.quantity_available }}</p>
+      
+                <form method="POST" action="{{ url_for('add_to_cart') }}">
+                  <input type="hidden" name="item_id" value="{{ item.id }}">
+                  <div class="mb-2 d-flex align-items-center">
+                    <label for="quantity_{{ item.id }}" class="form-label me-2">Qty:</label>
+                    <input type="number" name="quantity" id="quantity_{{ item.id }}"
+                      min="1" max="{{ item.quantity_available }}" value="1"
+                      class="form-control w-25 me-2">
+                  </div>
+                  <div class="mb-2">
+                    <label for="notes_{{ item.id }}" class="form-label">Special Notes:</label>
+                    <textarea name="notes" id="notes_{{ item.id }}" rows="2"
+                      class="form-control" placeholder="e.g., No onions"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-teal rounded-pill px-4">Add to Cart</button>
+                </form>
               </div>
-              <div class="mb-2">
-                <label for="notes_{{ item.id }}" class="form-label">Special Notes:</label>
-                <textarea name="notes" id="notes_{{ item.id }}" rows="2"
-                  class="form-control" placeholder="e.g., No onions"></textarea>
-              </div>
-              <button type="submit" class="btn btn-teal rounded-pill px-4">Add to Cart</button>
-            </form>
+            </div>
           </div>
-        </div>
+          {% endif %}
+        {% endfor %}
+      
+        <!-- 🚫 Sold Out Items Next -->
+        {% for item in menu %}
+          {% if not item.is_available or item.quantity_available == 0 %}
+          <div class="col">
+            <div class="card h-100 shadow-sm sold-out-card position-relative">
+              <div class="sold-out-ribbon">SOLD OUT</div>
+              <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top sold-out-img" alt="{{ item.name }}">
+              <div class="card-body text-center">
+                <h5 class="card-title text-danger">{{ item.name }}</h5>
+                <p class="card-text text-muted">{{ item.description }}</p>
+                <p class="fw-bold text-muted">Price: ₹{{ item.price }}</p>
+                <div class="badge bg-danger mt-2">Out of Stock</div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      
       </div>
-      {% endfor %}
-
-
-<!-- 🚫 Sold Out Items Next -->
-{% for item in sold_out_items %}
-<div class="col">
-  <div class="card h-100 shadow-sm sold-out-card">
-    <div class="sold-out-overlay">SOLD OUT</div> <!-- 🛑 nice label -->
-    <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
-    <div class="card-body text-center">
-      <h5 class="card-title text-danger">{{ item.name }}</h5>
-      <p class="card-text">{{ item.description }}</p>
-      <p class="fw-bold">Price: ₹{{ item.price }}</p>
-    </div>
-  </div>
-</div>
-{% endfor %}
-
-
-
+      
     </div>
   {% else %}
     <p class="text-center">No menu items available right now. Please check back later.</p>

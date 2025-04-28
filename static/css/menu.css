@@ -1,125 +1,129 @@
 /* -------------------- COLOR VARIABLES -------------------- */
 :root {
-    --primary-teal: #009999;
-    --accent-orange: #F7931E;
-    --dark-teal: #006666;
-    --text-dark: #333333;
-    --bg-light: #f9f9f9;
-    --white: #ffffff;
-    --radius-pill: 50px;
-    --radius-card: 8px;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-  
-  body {
-    font-family: 'Lato', sans-serif;
-    color: var(--text-dark);
-    background-color: var(--white);
-  }
-  
-  /* -------------------- HERO SECTION -------------------- */
-  .hero-section {
-    background: url('../images/hero.jpg') no-repeat center center/cover;
-    height: 100vh;
-    position: relative;
-  }
-  .hero-section .overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 1;
-  }
-  .hero-section .hero-text {
-    position: relative;
-    z-index: 2;
-  }
-  
-  /* -------------------- TEAL BUTTON -------------------- */
-  .btn-teal {
-    background-color: var(--primary-teal);
-    color: var(--white);
-    border: none;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  .btn-teal:hover {
-    background-color: var(--dark-teal);
-    box-shadow: var(--shadow);
-  }
-  
-  /* -------------------- MENU CARDS -------------------- */
-  .menu-card {
-    border-radius: var(--radius-card);
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .menu-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  }
-  .menu-card img {
-    border-top-left-radius: var(--radius-card);
-    border-top-right-radius: var(--radius-card);
-    height: 220px;
-    object-fit: cover;
-  }
-  
-  .card-title {
-    font-weight: 600;
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .card-text {
-    font-size: 0.95rem;
-    color: #555;
-  }
-  
-  .card-footer form input[type="number"] {
-    font-size: 0.95rem;
-  }
-  
-  /* -------------------- MEDIA QUERIES -------------------- */
-  @media (max-width: 576px) {
-    .hero-section h1 {
-      font-size: 2rem;
-    }
-    .hero-section p {
-      font-size: 1rem;
-    }
-  }
-  
-  .card .btn[disabled] {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-  
+  --primary-teal: #009999;
+  --accent-orange: #F7931E;
+  --dark-teal: #006666;
+  --text-dark: #333333;
+  --bg-light: #f9f9f9;
+  --white: #ffffff;
+  --radius-pill: 50px;
+  --radius-card: 8px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
 
-  /* Sold-out card styles */
+/* -------------------- GENERAL -------------------- */
+body {
+  font-family: 'Lato', sans-serif;
+  color: var(--text-dark);
+  background-color: var(--white);
+}
+
+/* -------------------- HERO SECTION -------------------- */
+.hero-section {
+  background: url('../images/hero.jpg') no-repeat center center/cover;
+  height: 100vh;
+  position: relative;
+}
+.hero-section .overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+.hero-section .hero-text {
+  position: relative;
+  z-index: 2;
+}
+
+/* -------------------- BUTTONS -------------------- */
+.btn-teal {
+  background-color: var(--primary-teal);
+  color: var(--white);
+  border: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-teal:hover {
+  background-color: var(--dark-teal);
+  box-shadow: var(--shadow);
+}
+
+/* -------------------- MENU CARDS -------------------- */
+.menu-card, .card {
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.menu-card:hover, .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.menu-card img, .card img {
+  border-top-left-radius: var(--radius-card);
+  border-top-right-radius: var(--radius-card);
+  height: 220px;
+  object-fit: cover;
+}
+
+/* Text styles inside cards */
+.card-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.card-text {
+  font-size: 0.95rem;
+  color: #555;
+}
+.card-footer form input[type="number"] {
+  font-size: 0.95rem;
+}
+
+/* -------------------- SOLD OUT CARD STYLES -------------------- */
 .sold-out-card {
   position: relative;
-  background: #f8d7da; /* Light red/pink background */
-  border: 2px dashed #dc3545; /* Red dashed border */
+  border: 2px dashed #dc3545;
+  background-color: #fff0f0;
   opacity: 0.9;
+  overflow: hidden;
 }
 
 .sold-out-card img {
-  opacity: 0.7;
+  filter: grayscale(90%) brightness(90%);
+  opacity: 0.8;
 }
 
-.sold-out-card .card-body {
-  background-color: #fff5f5;
-}
-
-.sold-out-overlay {
+.sold-out-ribbon {
   position: absolute;
-  top: 10px;
-  left: -30px;
-  background: #dc3545;
+  top: 12px;
+  right: -40px;
+  background-color: #dc3545;
   color: white;
-  padding: 5px 30px;
+  padding: 5px 45px;
   font-weight: bold;
-  font-size: 0.85rem;
-  transform: rotate(-45deg);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 0.8rem;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
+
+/* -------------------- MEDIA QUERIES -------------------- */
+@media (max-width: 576px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  .hero-section p {
+    font-size: 1rem;
+  }
+  .menu-card img, .card img {
+    height: 180px;
+  }
+}
+
+/* -------------------- DISABLED BUTTON STYLE -------------------- */
+.card .btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
