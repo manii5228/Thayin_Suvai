@@ -2,7 +2,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for,flash
 from models import db, MenuItem, Order, OrderItem, Payment, Review, Address, Customer
 from datetime import datetime ,date, timedelta, timezone
-from forms import LoginForm,MenuItemForm, OrderForm, OrderItemForm, PaymentForm, CouponForm, ReviewForm 
+from Thayin_Suvai_ok.forms import LoginForm,MenuItemForm, OrderForm, OrderItemForm, PaymentForm, CouponForm, ReviewForm 
 import calendar
 import os
 from werkzeug.utils import secure_filename
@@ -55,7 +55,7 @@ def login():
         username = form.username.data
         password = form.password.data
 
-        if username == 'manii1346' and password == '1346':
+        if username == 'admin@gmail.com' and password == 'Admin@password':
             session['user_id'] = 'admin'
             session['user_type'] = 'admin'
             flash('Welcome back Admin', 'success')
