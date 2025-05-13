@@ -491,27 +491,6 @@ def manage_address():
     addresses = Address.query.filter_by(customer_id=session['user_id']).all()
     return render_template('address.html', addresses=addresses)
 
-@app.route('/menu/search')
-def search_menu():
-    query = request.args.get('query', '').strip()
-    veg_filter = request.args.get('veg')
-    sort_price = request.args.get('sort')  # 'asc' or 'desc'
-
-    items = MenuItem.query
-    if query:
-        items = items.filter(MenuItem.name.ilike(f"%{query}%"))
-    if veg_filter == 'veg':
-        items = items.filter(MenuItem.description.ilike('%veg%'))
-    elif veg_filter == 'nonveg':
-        items = items.filter(MenuItem.description.ilike('%non-veg%'))
-
-    if sort_price == 'asc':
-        items = items.order_by(MenuItem.price.asc())
-    elif sort_price == 'desc':
-        items = items.order_by(MenuItem.price.desc())
-
-    items = items.all()
-    return render_template('menu_search.html', menu=items)
 
 @app.route('/logout')
 def logout():
@@ -585,7 +564,7 @@ def update_status(order_id):
     order = Order.query.get_or_404(order_id)
     order.status = new_status
     db.session.commit()
-    return redirect(url_for('admin_orders'))
+    return redirect(url_for('admin_orders_today'))
 
 
 @app.route('/edit_menu/<int:menu_id>', methods=['GET', 'POST'])
@@ -687,13 +666,6 @@ def admin_orders_today():
 
 
 
-
-@app.route('/admin/orders/week')
-def admin_orders_week():
-    start, end = get_date_range('week')
-    orders = Order.query.filter(Order.order_time >= start, Order.order_time <= end).order_by(Order.order_time.desc()).all()
-    return render_template('admin_orders_week_month.html', orders=orders, title="This Week's Orders")
-
 @app.route('/admin/orders/month')
 def admin_orders_month():
     start, end = get_date_range('month')
@@ -782,7 +754,7 @@ def mark_order_paid(order_id):
     else:
         flash(f"Order #{order.id} is already marked as paid.", "info")
 
-    return redirect(url_for('admin_orders'))
+    return redirect(url_for('admin_orders_today'))
 
 @app.route('/order/<int:order_id>/track')
 def track_order(order_id):
@@ -796,52 +768,8 @@ def track_order(order_id):
 
     return render_template('track_order.html', order=order)
 
-@app.route('/admin/download_orders/<period>')
-def download_orders_csv(period):
-    ist = timezone('Asia/Kolkata')
-    now = datetime.now(ist)
-
-    # Determine time range
-    if period == 'today':
-        start = datetime.combine(now.date(), datetime.min.time()).astimezone(ist)
-        end = datetime.combine(now.date(), datetime.max.time()).astimezone(ist)
-    elif period == 'this_month':
-        start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        end = now
-    elif period == 'this_week':
-        start = now - timedelta(days=now.weekday())
-        start = start.replace(hour=0, minute=0, second=0, microsecond=0)
-        end = now
-    else:
-        return "Invalid period", 400
-
-    # Convert to UTC if your DB stores in UTC
-    start_utc = start.astimezone(timezone('UTC'))
-    end_utc = end.astimezone(timezone('UTC'))
-
-    orders = Order.query.filter(Order.order_time >= start_utc, Order.order_time <= end_utc).all()
-
-    # Create CSV
-    output = StringIO()
-    writer = csv.writer(output)
-    writer.writerow(['Order ID', 'Customer Name', 'Order Time', 'Type', 'Table', 'Status', 'Total', 'Paid'])
-
-    for order in orders:
-        writer.writerow([
-            order.id,
-            order.customer.name,
-            order.order_time.astimezone(ist).strftime('%Y-%m-%d %I:%M %p'),
-            order.order_type,
-            order.table_number if order.order_type == 'Dine-In' else '-',
-            order.status,
-            f"{order.total:.2f}" if order.total else "0.00",
-            'Yes' if order.payment else 'No'
-        ])
-
-    output.seek(0)
-
-    return Response(
-        output,
-        mimetype='text/csv',
-        headers={'Content-Disposition': f'attachment; filename={period}_orders.csv'}
-    )
+@app.route('/admin/orders/print/<period>')
+def admin_print_orders(period):
+    # You can replace this with actual filtering by date range if needed
+    orders = Order.query.all()
+    return render_template('admin_print_orders.html', orders=orders, title=period.replace("_", " ").title())

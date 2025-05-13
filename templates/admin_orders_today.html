@@ -53,6 +53,9 @@
               {{ order.order_time.strftime('%I:%M %p') }} | {{ order.order_type }}
             </div>
             <a href="{{ url_for('track_order', order_id=order.id) }}" class="btn btn-sm btn-warning">Review</a>
+             <form method="POST" action="{{ url_for('mark_order_paid', order_id=order.id) }}">
+                <button type="submit" class="btn btn-sm btn-outline-success">Mark as Paid</button>
+              </form>
           </li>
           {% endfor %}
         </ul>

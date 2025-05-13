@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Printable Orders - {{ title }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      color: #009999;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #009999;
+      color: white;
+    }
+    .badge {
+      font-weight: bold;
+      padding: 0.3em 0.7em;
+      border-radius: 8px;
+      color: white;
+    }
+    .badge-canceled { background-color: #dc3545; }
+    .badge-delivered { background-color: #28a745; }
+    .badge-inprogress { background-color: #17a2b8; }
+
+    @media print {
+      button { display: none; }
+    }
+  </style>
+</head>
+<body onload="window.print()">
+
+  <h2>📋 Orders - {{ title }}</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Table</th>
+        <th>Paid</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>#{{ order.id }}</td>
+        <td>{{ order.customer.name }}</td>
+        <td>{{ order.order_time.strftime('%d-%m-%Y %I:%M %p') }}</td>
+        <td>
+          {% if order.status == 'Canceled' %}
+            <span class="badge badge-canceled">❌ Canceled</span>
+          {% elif order.status == 'Delivered' %}
+            <span class="badge badge-delivered">✅ Delivered</span>
+          {% else %}
+            <span class="badge badge-inprogress"> {{ order.status }}</span>
+          {% endif %}
+        </td>
+        <td>{{ order.order_type }}</td>
+        <td>{% if order.order_type == 'Dine-In' %}{{ order.table_number }}{% else %}-{% endif %}</td>
+        <td>{{ "Yes" if order.payment else "No" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+</html>

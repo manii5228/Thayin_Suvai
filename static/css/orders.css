@@ -1,46 +1,99 @@
-/* ---------------- PAST ORDERS PAGE ---------------- */
+/* ---------------- GENERAL PAGE STYLING ---------------- */
 body {
-    background-color: #f4fbfb;
+  background-color: #f4fbfb;
+  font-family: 'Lato', sans-serif;
+  color: #333;
+}
+
+h2 {
+  color: #009999;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+/* ---------------- TABLE STYLING ---------------- */
+.table {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.table thead th {
+  background-color: #006666;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.table-bordered td, 
+.table-bordered th {
+  border: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.table-danger {
+  background-color: #f8d7da !important;
+  color: #721c24;
+}
+
+.table-danger td {
+  border-color: #f5c6cb;
+}
+
+/* ---------------- CUSTOM BADGES ---------------- */
+.custom-badge {
+  font-weight: 600;
+  padding: 0.4em 0.8em;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ❌ Canceled */
+.badge-canceled {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* ✅ Delivered */
+.badge-delivered {
+  background-color: #28a745;
+  color: #fff;
+}
+
+/* ⏳ In Progress */
+.badge-inprogress {
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+/* ---------------- MOBILE RESPONSIVENESS ---------------- */
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.9rem;
   }
-  
+
+  .custom-badge {
+    font-size: 0.75rem;
+    padding: 0.3em 0.6em;
+  }
+
   h2 {
-    color: #009999;
-    font-weight: bold;
+    font-size: 1.5rem;
   }
-  
-  .card {
-    border-radius: 12px;
-    border: none;
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .card:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card-title {
-    color: #333;
-    font-weight: 600;
-  }
-  
-  .btn-teal {
-    background-color: #009999;
-    color: #ffffff;
-    border: none;
-  }
-  
-  .btn-teal:hover {
-    background-color: 
-   
-    #B67352;}
-  
-  .btn-outline-primary {
-    border-color: #009999;
-    color: #009999;
-  }
-  
-  .btn-outline-primary:hover {
-    background-color: #009999;
-    color: #fff;
-  }
-  
+}
+
+body::after {
+  content: "CSS loaded ✅";
+  display: block;
+  text-align: center;
+  font-size: 1rem;
+  color: red;
+}

@@ -3,7 +3,7 @@
 {% block title %}All Orders - Admin | Thyain Suvai{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_orders.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/orders.css') }}?v=3">
 {% endblock %}
 
 {% block content %}
@@ -21,48 +21,25 @@
           <th>Status</th>
           <th>Type</th>
           <th>Table</th>
-          <th>Paid</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         {% for order in orders %}
-        <tr class="{% if order.status == 'Canceled' %}table-danger{% endif %}">
+        <tr class="{% if order.status == 'Cancelled' %}table-danger{% endif %}">
           <td>#{{ order.id }}</td>
           <td>{{ order.customer.name }}</td>
-          <td>{{ order.order_time.strftime('%Y-%m-%d %I:%M %p') }}</td>
+          <td>{{ order.order_time.strftime('%d-%m-%Y %I:%M %p') }}</td>
           <td>
-            {% if order.status == 'Canceled' %}
-              <span class="badge bg-danger">Canceled</span>
+            {% if order.status == 'Cancelled' %}
+              <span class="custom-badge badge-canceled">❌ Cancelled</span>
             {% elif order.status == 'Delivered' %}
-              <span class="badge bg-success">Delivered</span>
+              <span class="custom-badge badge-delivered">✅ Delivered</span>
             {% else %}
-              <span class="badge bg-info">{{ order.status }}</span>
+              <span class="custom-badge badge-inprogress"> {{ order.status }}</span>
             {% endif %}
           </td>
           <td>{{ order.order_type }}</td>
           <td>{% if order.order_type == 'Dine-In' %}{{ order.table_number }}{% else %}-{% endif %}</td>
-          <td>
-            {% if order.payment %}
-              <span class="badge bg-success">Paid</span>
-            {% else %}
-              <form method="POST" action="{{ url_for('mark_order_paid', order_id=order.id) }}">
-                <button type="submit" class="btn btn-sm btn-outline-success">Mark as Paid</button>
-              </form>
-            {% endif %}
-          </td>
-          <td>
-            {% if order.status == 'Delivered' %}
-              <span class="text-muted">Delivered</span>
-            {% elif order.status == 'Canceled' %}
-              <span class="text-muted">Canceled</span>
-            {% else %}
-              <form method="POST" action="{{ url_for('update_status', order_id=order.id) }}" class="d-inline">
-                <input type="hidden" name="status" value="Delivered">
-                <button type="submit" class="btn btn-sm btn-outline-primary">Mark as Delivered</button>
-              </form>
-            {% endif %}
-          </td>
         </tr>
         {% endfor %}
       </tbody>

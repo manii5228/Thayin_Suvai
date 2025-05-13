@@ -79,6 +79,33 @@ body {
 .card-footer form input[type="number"] {
   font-size: 0.95rem;
 }
+/* -------------------- CATEGORY TABS -------------------- */
+#categoryTabs {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#categoryTabs .nav-link {
+  border: 2px solid var(--primary-teal);
+  color: var(--primary-teal);
+  border-radius: var(--radius-pill);
+  padding: 0.5em 1.2em;
+  font-weight: 600;
+  background-color: transparent;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.2s;
+}
+
+#categoryTabs .nav-link:hover {
+  background-color: var(--accent-orange);
+  color: white;
+  box-shadow: var(--shadow);
+}
+
+#categoryTabs .nav-link.active {
+  background-color: var(--primary-teal);
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 153, 153, 0.2);
+}
 
 /* -------------------- SOLD OUT CARD STYLES -------------------- */
 .sold-out-card {

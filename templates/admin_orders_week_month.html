@@ -10,9 +10,13 @@
 <div class="container py-5">
   <h2 class="text-center mb-4">📅 {{ title }}</h2>
 
+   
+
+
   <div class="text-end mb-3">
-    <a href="{{ url_for('download_orders_csv', period=title|lower|replace(' ', '_')) }}" class="btn btn-outline-primary rounded-pill">
-      ⬇️ Download Orders
+    <a href="{{ url_for('admin_print_orders', period=title|lower|replace(' ', '_')) }}" 
+      class="btn btn-outline-secondary rounded-pill" target="_blank">
+  ⬇️ Download Orders/🖨️ Print Orders
     </a>
   </div>
 
@@ -36,7 +40,7 @@
         <tr>
           <td>#{{ order.id }}</td>
           <td>{{ order.customer.name }}</td>
-          <td>{{ order.order_time.strftime('%Y-%m-%d %I:%M %p') }}</td>
+          <td>{{ order.order_time.strftime('%d-%m-%Y %I:%M %p') }}</td>
           <td><span class="badge bg-info">{{ order.status }}</span></td>
           <td>{{ order.order_type }}</td>
           <td>{% if order.order_type == 'Dine-In' %}{{ order.table_number }}{% else %}-{% endif %}</td>
