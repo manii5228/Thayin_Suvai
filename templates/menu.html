@@ -8,69 +8,73 @@
 
 {% block content %}
 <div class="container py-5">
-  <h2 class="text-center mb-4">Our Full Menu</h2>
+  <h2 class="text-center mb-4">Explore Our Menu</h2>
 
-  {% if menu %}
-    {% set available_items = menu | selectattr("is_available") | list %}
-    {% set sold_out_items = menu | rejectattr("is_available") | list %}
+  {% if categorized_menu %}
+    <!-- Category Tabs -->
+    <ul class="nav nav-pills justify-content-center mb-4" id="categoryTabs">
+      {% for category in categorized_menu.keys() %}
+      <li class="nav-item">
+        <button class="nav-link {% if loop.first %}active{% endif %}" data-bs-toggle="tab" data-bs-target="#cat{{ loop.index }}">
+          {{ category }}
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="tab-content">
+      {% for category, items in categorized_menu.items() %}
+      <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="cat{{ loop.index }}">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          {% for item in items %}
+            {% if item.is_available and item.quantity_available > 0 %}
+            <div class="col">
+              <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <p class="fw-bold">Category: {{ item.category }}</p>
+                  <p class="fw-bold">Price: ₹{{ item.price }}</p>
+                  <p class="text-muted">Available: {{ item.quantity_available }}</p>
 
-      
-
-        <!-- 🍛 Available Items First -->
-        {% for item in menu %}
-          {% if item.is_available and item.quantity_available > 0 %}
-          <div class="col">
-            <div class="card h-100 shadow-sm">
-              <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
-              <div class="card-body">
-                <h5 class="card-title">{{ item.name }}</h5>
-                <p class="card-text">{{ item.description }}</p>
-                <p class="fw-bold">Price: ₹{{ item.price }}</p>
-                <p class="text-muted">Available: {{ item.quantity_available }}</p>
-      
-                <form method="POST" action="{{ url_for('add_to_cart') }}">
-                  <input type="hidden" name="item_id" value="{{ item.id }}">
-                  <div class="mb-2 d-flex align-items-center">
-                    <label for="quantity_{{ item.id }}" class="form-label me-2">Qty:</label>
-                    <input type="number" name="quantity" id="quantity_{{ item.id }}"
-                      min="1" max="{{ item.quantity_available }}" value="1"
-                      class="form-control w-25 me-2">
-                  </div>
-                  <div class="mb-2">
-                    <label for="notes_{{ item.id }}" class="form-label">Special Notes:</label>
-                    <textarea name="notes" id="notes_{{ item.id }}" rows="2"
-                      class="form-control" placeholder="e.g., No onions"></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-teal rounded-pill px-4">Add to Cart</button>
-                </form>
+                  <form method="POST" action="{{ url_for('add_to_cart') }}">
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <div class="mb-2 d-flex align-items-center">
+                      <label for="quantity_{{ item.id }}" class="form-label me-2">Qty:</label>
+                      <input type="number" name="quantity" id="quantity_{{ item.id }}"
+                        min="1" max="{{ item.quantity_available }}" value="1"
+                        class="form-control w-25 me-2">
+                    </div>
+                    <div class="mb-2">
+                      <label for="notes_{{ item.id }}" class="form-label">Special Notes:</label>
+                      <textarea name="notes" id="notes_{{ item.id }}" rows="2"
+                        class="form-control" placeholder="e.g., No onions"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-teal rounded-pill px-4">Add to Cart</button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-          {% endif %}
-        {% endfor %}
-      
-        <!-- 🚫 Sold Out Items Next -->
-        {% for item in menu %}
-          {% if not item.is_available or item.quantity_available == 0 %}
-          <div class="col">
-            <div class="card h-100 shadow-sm sold-out-card position-relative">
-              <div class="sold-out-ribbon">SOLD OUT</div>
-              <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top sold-out-img" alt="{{ item.name }}">
-              <div class="card-body text-center">
-                <h5 class="card-title text-danger">{{ item.name }}</h5>
-                <p class="card-text text-muted">{{ item.description }}</p>
-                <p class="fw-bold text-muted">Price: ₹{{ item.price }}</p>
-                <div class="badge bg-danger mt-2">Out of Stock</div>
+            {% else %}
+            <!-- Sold Out Item -->
+            <div class="col">
+              <div class="card h-100 shadow-sm sold-out-card position-relative">
+                <div class="sold-out-ribbon">SOLD OUT</div>
+                <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top sold-out-img" alt="{{ item.name }}">
+                <div class="card-body text-center">
+                  <h5 class="card-title text-danger">{{ item.name }}</h5>
+                  <p class="card-text text-muted">{{ item.description }}</p>
+                  <p class="fw-bold text-muted">Category: {{ item.category }}</p>
+                  <p class="fw-bold text-muted">Price: ₹{{ item.price }}</p>
+                  <div class="badge bg-danger mt-2">Out of Stock</div>
+                </div>
               </div>
             </div>
-          </div>
-          {% endif %}
-        {% endfor %}
-      
-   
-      
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
     </div>
   {% else %}
     <p class="text-center">No menu items available right now. Please check back later.</p>

@@ -14,6 +14,7 @@
     <a href="#addItemForm" class="btn btn-success rounded-pill px-4" data-bs-toggle="collapse">+ Add New Menu Item</a>
   </div>
 
+
   <div id="addItemForm" class="collapse">
     <form action="{{ url_for('add_menu') }}" method="POST" enctype="multipart/form-data" class="mb-5 p-4 border rounded shadow-sm">
       <h5>Add New Menu Item</h5>
@@ -30,10 +31,11 @@
           <label for="quantity_available" class="form-label">Quantity Available</label>
           <input type="number" name="quantity_available" id="quantity_available" class="form-control" required>
         </div>
-        <div class="col-md-6">
-          <label for="description" class="form-label">Description</label>
-          <textarea name="description" id="description" class="form-control" rows="2" required></textarea>
+       <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <input type="text" class="form-control" id="category" name="category" value="{{ menu.category if menu else '' }}" required>
         </div>
+
         <div class="col-md-6">
           <label for="image" class="form-label">Image</label>
           <input type="file" name="image" id="image" class="form-control">
@@ -51,64 +53,106 @@
     </form>
   </div>
 
-  <div class="table-responsive mb-5">
-    <h4 class="mb-3">Menu Items</h4>
-    <table class="table table-bordered table-hover text-center align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Price</th>
-          <th>Quantity Left</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in menu %}
-        <tr>
-          <td><img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" width="60"></td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.description }}</td>
-          <td>₹{{ item.price }}</td>
-          <td>{{ item.quantity_available }}</td>
-          <td>
-            {% if item.is_available %}
-              <span class="badge bg-success">Available</span>
-            {% else %}
-              <span class="badge bg-secondary">Sold Out</span>
-            {% endif %}
-          </td>
-          <td>
-            <a href="{{ url_for('edit_menu', menu_id=item.id) }}" class="btn btn-sm" >
-              ✏️ Edit
-            </a>
-            
-            <form method="POST" action="{{ url_for('delete_menu', menu_id=item.id) }}" style="display:inline;">
-              <button class="btn btn-sm" style="background-color:
+ <div class="menu-items-section mb-5">
+  <h4 class="mb-4">Menu Items</h4>
+  {% if categorized_menu %}
+    {% for category, items in categorized_menu.items() %}
+      <h5 class="text-primary mt-4">{{ category }}</h5>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+            <tr>
+              <td><img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" width="60"></td>
+              <td>{{ item.name }}</td>
+              <td>₹{{ item.price }}</td>
+              <td>{{ item.quantity_available }}</td>
+              <td>
+                {% if item.is_available %}
+                  <span class="badge bg-success">Available</span>
+                {% else %}
+                  <span class="badge bg-secondary">Sold Out</span>
+                {% endif %}
+              </td>
+              <td>
+                <a href="{{ url_for('edit_menu', menu_id=item.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <form method="POST" action="{{ url_for('delete_menu', menu_id=item.id) }}" style="display:inline;">
+                  <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this item?')">Delete</button>
+                </form>
+                <form method="POST" action="{{ url_for('toggle_availability', menu_id=item.id) }}" style="display:inline;">
+                  <button type="submit"
+                    class="btn btn-sm {% if item.is_available %}btn-outline-secondary{% else %}btn-outline-success{% endif %} mt-1">
+                    {% if item.is_available %}Mark Sold Out{% else %}Mark Available{% endif %}
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+    {% else %}
+    <h5 class="text-secondary mt-4">All Items (Uncategorized)</h5>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in menu %}
+          <tr>
+            <td><img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" width="60"></td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.category or 'Uncategorized' }}</td>
+            <td>₹{{ item.price }}</td>
+            <td>{{ item.quantity_available }}</td>
+            <td>
+              {% if item.is_available %}
+                <span class="badge bg-success">Available</span>
+              {% else %}
+                <span class="badge bg-secondary">Sold Out</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ url_for('edit_menu', menu_id=item.id) }}" class="btn btn-sm btn-warning">Edit</a>
+              <form method="POST" action="{{ url_for('delete_menu', menu_id=item.id) }}" style="display:inline;">
+                <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this item?')">Delete</button>
+              </form>
+              <form method="POST" action="{{ url_for('toggle_availability', menu_id=item.id) }}" style="display:inline;">
+                <button type="submit"
+                  class="btn btn-sm {% if item.is_available %}btn-outline-secondary{% else %}btn-outline-success{% endif %} mt-1">
+                  {% if item.is_available %}Mark Sold Out{% else %}Mark Available{% endif %}
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
 
-#ECB159
+</div>
 
-; color: white;" onclick="return confirm('Delete this item?')">
-                🗑 Delete
-              </button>
-            </form>
-            
-            <form method="POST" action="{{ url_for('toggle_availability', menu_id=item.id) }}" style="display:inline;">
-              <button type="submit" class="btn btn-sm mt-1"
-                style="background-color: {% if item.is_available %}#f39c12{% else %}#27ae60{% endif %}; color: white;">
-                {% if item.is_available %}Mark Sold Out{% else %}Mark Available{% endif %}
-              </button>
-            </form>
-            
-           
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
 
   <div class="mb-5">
     <h4 class="mb-3">Orders</h4>

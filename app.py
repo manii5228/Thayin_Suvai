@@ -91,8 +91,13 @@ def register():
 
 @app.route('/menu')
 def browse_menu():
-    menu = MenuItem.query.all()
-    return render_template('menu.html', menu=menu)
+    menu_items = MenuItem.query.filter_by(is_available=True).all()
+
+    categorized_menu = {}
+    for item in menu_items:
+        categorized_menu.setdefault(item.category, []).append(item)
+
+    return render_template('menu.html', categorized_menu=categorized_menu)
 
 @app.route('/cart', methods=['POST'])
 def add_to_cart():
@@ -107,8 +112,7 @@ def add_to_cart():
     cart = session['cart']
     cart.append({
         'menu_item_id': int(item_id),
-        'quantity': quantity,
-        'notes': notes
+        'quantity': quantity
     })
     session['cart'] = cart  # 🔥 You MUST reassign back to session
     session.modified = True  # ✅ Ensures session updates
@@ -519,7 +523,7 @@ def admin_dashboard():
 @app.route('/admin/add_menu', methods=['POST'])
 def add_menu():
     name = request.form.get('name')
-    description = request.form.get('description')
+
     base_price = request.form.get('base_price')
     quantity_available = request.form.get('quantity_available')
     is_available = request.form.get('is_available') == 'on'
@@ -535,11 +539,11 @@ def add_menu():
     try:
         new_menu = MenuItem(
             name=name,
-            description=description,
             price=float(base_price),
             quantity_available=int(quantity_available),
             is_available=is_available,
-            image=filename
+            image=filename,
+            category=request.form.get('category', 'General')
         )
         db.session.add(new_menu)
         db.session.commit()
@@ -584,10 +588,10 @@ def edit_menu(menu_id):
 
     if request.method == 'POST':
         menu.name = request.form['name']
-        menu.description = request.form['description']
         menu.price = float(request.form['price'])
         menu.quantity_available = int(request.form['quantity_available'])
         menu.is_available = 'is_available' in request.form
+        menu.category = request.form.get('category', 'General')
 
         # 🔄 Check and update image if a new one is uploaded
         if 'image' in request.files:
