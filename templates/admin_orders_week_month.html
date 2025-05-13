@@ -10,6 +10,12 @@
 <div class="container py-5">
   <h2 class="text-center mb-4">📅 {{ title }}</h2>
 
+  <div class="text-end mb-3">
+    <a href="{{ url_for('download_orders_csv', period=title|lower|replace(' ', '_')) }}" class="btn btn-outline-primary rounded-pill">
+      ⬇️ Download Orders
+    </a>
+  </div>
+
   {% if orders %}
   <div class="table-responsive">
     <table class="table table-bordered table-hover text-center align-middle">
@@ -37,11 +43,10 @@
           <td>
             {% if order.payment %}
               <span class="badge bg-success">Yes</span>
-            {% else %}
-              <form method="POST" action="{{ url_for('mark_order_paid', order_id=order.id) }}">
-                <button type="submit" class="btn btn-sm btn-outline-danger">Mark Paid</button>
-              </form>
             {% endif %}
+          </td>
+          <td>
+            <a href="{{ url_for('track_order', order_id=order.id) }}" class="btn btn-sm btn-outline-primary">View</a>
           </td>
         </tr>
         {% endfor %}

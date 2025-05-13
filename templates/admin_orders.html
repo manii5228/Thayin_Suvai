@@ -27,11 +27,19 @@
       </thead>
       <tbody>
         {% for order in orders %}
-        <tr>
+        <tr class="{% if order.status == 'Canceled' %}table-danger{% endif %}">
           <td>#{{ order.id }}</td>
           <td>{{ order.customer.name }}</td>
           <td>{{ order.order_time.strftime('%Y-%m-%d %I:%M %p') }}</td>
-          <td><span class="badge bg-info">{{ order.status }}</span></td>
+          <td>
+            {% if order.status == 'Canceled' %}
+              <span class="badge bg-danger">Canceled</span>
+            {% elif order.status == 'Delivered' %}
+              <span class="badge bg-success">Delivered</span>
+            {% else %}
+              <span class="badge bg-info">{{ order.status }}</span>
+            {% endif %}
+          </td>
           <td>{{ order.order_type }}</td>
           <td>{% if order.order_type == 'Dine-In' %}{{ order.table_number }}{% else %}-{% endif %}</td>
           <td>
@@ -44,13 +52,15 @@
             {% endif %}
           </td>
           <td>
-            {% if order.status != 'Delivered' %}
+            {% if order.status == 'Delivered' %}
+              <span class="text-muted">Delivered</span>
+            {% elif order.status == 'Canceled' %}
+              <span class="text-muted">Canceled</span>
+            {% else %}
               <form method="POST" action="{{ url_for('update_status', order_id=order.id) }}" class="d-inline">
                 <input type="hidden" name="status" value="Delivered">
                 <button type="submit" class="btn btn-sm btn-outline-primary">Mark as Delivered</button>
               </form>
-            {% else %}
-              <span class="text-muted">Delivered</span>
             {% endif %}
           </td>
         </tr>

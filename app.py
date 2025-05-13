@@ -11,6 +11,12 @@ from datetime import datetime, timedelta, timezone
 from pytz import timezone as pytz_timezone
 
 
+from flask import send_file, Response
+import csv
+from io import StringIO
+
+
+
 
 
 app = Flask(__name__)
@@ -789,3 +795,53 @@ def track_order(order_id):
     
 
     return render_template('track_order.html', order=order)
+
+@app.route('/admin/download_orders/<period>')
+def download_orders_csv(period):
+    ist = timezone('Asia/Kolkata')
+    now = datetime.now(ist)
+
+    # Determine time range
+    if period == 'today':
+        start = datetime.combine(now.date(), datetime.min.time()).astimezone(ist)
+        end = datetime.combine(now.date(), datetime.max.time()).astimezone(ist)
+    elif period == 'this_month':
+        start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        end = now
+    elif period == 'this_week':
+        start = now - timedelta(days=now.weekday())
+        start = start.replace(hour=0, minute=0, second=0, microsecond=0)
+        end = now
+    else:
+        return "Invalid period", 400
+
+    # Convert to UTC if your DB stores in UTC
+    start_utc = start.astimezone(timezone('UTC'))
+    end_utc = end.astimezone(timezone('UTC'))
+
+    orders = Order.query.filter(Order.order_time >= start_utc, Order.order_time <= end_utc).all()
+
+    # Create CSV
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['Order ID', 'Customer Name', 'Order Time', 'Type', 'Table', 'Status', 'Total', 'Paid'])
+
+    for order in orders:
+        writer.writerow([
+            order.id,
+            order.customer.name,
+            order.order_time.astimezone(ist).strftime('%Y-%m-%d %I:%M %p'),
+            order.order_type,
+            order.table_number if order.order_type == 'Dine-In' else '-',
+            order.status,
+            f"{order.total:.2f}" if order.total else "0.00",
+            'Yes' if order.payment else 'No'
+        ])
+
+    output.seek(0)
+
+    return Response(
+        output,
+        mimetype='text/csv',
+        headers={'Content-Disposition': f'attachment; filename={period}_orders.csv'}
+    )
