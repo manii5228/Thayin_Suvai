@@ -28,6 +28,12 @@ class MenuItemForm(FlaskForm):
     image = StringField('Image Filename', validators=[Optional()])  # Assuming filename is provided
     is_available = BooleanField('Available')
     submit = SubmitField('Save Item')
+    category = SelectField('Category', choices=[
+        ('Appetizer', 'Appetizer'),
+        ('Main Course', 'Main Course'),
+        ('Dessert', 'Dessert'),
+        ('Beverage', 'Beverage')
+    ], validators=[DataRequired()])
 
 
 # ------------------ Order ------------------

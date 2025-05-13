@@ -18,6 +18,7 @@ class MenuItem(db.Model):
     description = db.Column(db.String(255))
     price = db.Column(db.Float, nullable=False)
     quantity_available = db.Column(db.Integer, nullable=False)  # quantity available in stock
+    category= db.Column(db.String(50))  # e.g., Appetizer, Main Course, Dessert
     is_available = db.Column(db.Boolean, default=True)
     image = db.Column(db.String(100))  # stores image filename
 
