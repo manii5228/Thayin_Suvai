@@ -34,7 +34,13 @@
           <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" class="card-img-top" alt="{{ item.name }}">
           <div class="card-body text-center">
             <h5 class="card-title">{{ item.name }}</h5>
-            <p class="card-text small">{{ item.description[:70] }}{% if item.description|length > 70 %}...{% endif %}</p>
+            <p class="card-text small">
+              {% if item.description %}
+                {{ item.description[:70] }}{% if item.description|length > 70 %}...{% endif %}
+              {% else %}
+                No description available.
+              {% endif %}
+            </p>  
           </div>
           <div class="card-footer bg-white border-0 text-center">
             <a href="{{ url_for('browse_menu') }}" class="btn btn-teal rounded-pill px-4">Order Now</a>
