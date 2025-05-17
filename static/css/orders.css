@@ -89,11 +89,3 @@ h2 {
     font-size: 1.5rem;
   }
 }
-
-body::after {
-  content: "CSS loaded ✅";
-  display: block;
-  text-align: center;
-  font-size: 1rem;
-  color: red;
-}
